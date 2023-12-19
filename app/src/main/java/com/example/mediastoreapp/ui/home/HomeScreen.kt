@@ -10,6 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -79,15 +80,6 @@ fun HomeScreen(
 private fun HomeBody(
     onItemClick: () -> Unit, modifier: Modifier = Modifier
 ) {
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {result ->
-        if (result.resultCode == RESULT_OK) {
-            result.data?.data?.also {uri->
-                Log.d("test-intent", "$uri")
-            }
-        }
-    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -102,6 +94,8 @@ private fun HomeBody(
                 modifier = Modifier.height(conf.screenWidthDp.dp).width(conf.screenWidthDp.dp)
             )
 
+            Text("Image Tags: ", modifier = Modifier.padding(top=20.dp))
+            Spacer(Modifier.weight(1f))
             val imageUri = MediaStore.setRequireOriginal(currentImageUri!!)
             context.contentResolver.openInputStream(imageUri)?.use { input ->
                 ExifInterface(input).run {
@@ -124,6 +118,7 @@ private fun HomeBody(
                 input.close()
             }
         }
+        Spacer(Modifier.weight(1f))
         Button(
             onClick = onItemClick,
             shape = MaterialTheme.shapes.small,
@@ -131,7 +126,7 @@ private fun HomeBody(
         ){
             Text("Select Image")
         }
-
+        Spacer(Modifier.weight(1f))
     }
 }
 
